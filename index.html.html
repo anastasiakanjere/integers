@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🧮 Integer Challenge · Worksheet</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 780px;
+            width: 100%;
+            background: white;
+            border-radius: 40px;
+            padding: 30px 28px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        .subhead {
+            color: #3a4a5e;
+            text-align: center;
+            font-size: 1.05rem;
+            border-bottom: 2px solid #e6edf4;
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+        }
+
+        /* Level selector */
+        .level-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 12px 0 6px;
+        }
+        .level-btn {
+            border: none;
+            border-radius: 60px;
+            padding: 18px 6px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.12s ease;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.06);
+            color: #1e1e2a;
+            background: #eef2f6;
+        }
+        .level-btn:hover { transform: scale(0.96); }
+        .level-btn:active { transform: scale(0.93); }
+        .gold { background: #f7e05e; color: #4d3d00; }
+        .green { background: #6fcf97; color: #00331a; }
+        .purple { background: #bb86fc; color: #1f0033; }
+        .black { background: #2d2d3f; color: #f0f0f5; }
+
+        /* Worksheet */
+        .worksheet {
+            margin-top: 8px;
+        }
+        .question-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+            flex-wrap: wrap;
+        }
+        .question-row .qnum {
+            font-weight: 600;
+            color: #4f657d;
+            min-width: 32px;
+            font-size: 0.95rem;
+        }
+        .question-row .qtext {
+            font-size: 1.3rem;
+            font-weight: 500;
+            flex: 1;
+            min-width: 120px;
+            color: #0b1a2a;
+        }
+        .question-row .qinput {
+            width: 90px;
+            padding: 8px 6px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #cddae9;
+            border-radius: 30px;
+            background: white;
+            outline: none;
+            transition: 0.12s;
+            font-weight: 500;
+        }
+        .question-row .qinput:focus {
+            border-color: #6f8fc0;
+            box-shadow: 0 0 0 3px rgba(80, 120, 200, 0.2);
+        }
+        .question-row .qinput.correct {
+            border-color: #1e8b4a;
+            background: #e6f7ed;
+        }
+        .question-row .qinput.wrong {
+            border-color: #b13a4b;
+            background: #fde8eb;
+        }
+        .question-row .qinput:disabled {
+            opacity: 0.8;
+        }
+        .qfeedback {
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 130px;
+        }
+        .qfeedback.correct { color: #1e7b4a; }
+        .qfeedback.wrong { color: #b13a4b; }
+        .qfeedback .show-answer {
+            font-weight: 400;
+            color: #4a5f77;
+            font-size: 0.95rem;
+        }
+
+        /* Buttons & score */
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin: 26px 0 12px;
+        }
+        .primary-btn {
+            background: #1d3557;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 38px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #0b1a2e;
+        }
+        .primary-btn:hover { background: #264b7a; transform: scale(0.97); }
+        .primary-btn:active { transform: scale(0.94); }
+        .primary-btn:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: default;
+        }
+
+        .secondary-btn {
+            background: #dce4ed;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #1f344a;
+            transition: 0.1s;
+        }
+        .secondary-btn:hover { background: #c8d3e0; }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 12px;
+            background: #eef4fa;
+            border-radius: 60px;
+            margin: 6px 0 4px;
+        }
+        .score-display span { color: #1d3d5c; }
+
+        .perfect-banner {
+            display: none;
+            background: #f5f9ff;
+            border-radius: 48px;
+            padding: 18px 16px 22px;
+            margin: 12px 0 6px;
+            border: 4px solid #f7d44a;
+            text-align: center;
+        }
+        .perfect-banner.show { display: block; }
+        .perfect-banner .trophy { font-size: 3.4rem; display: block; }
+        .perfect-banner h2 { font-size: 2.2rem; }
+
+        .hidden { display: none; }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 14px; }
+            .question-row { padding: 12px 6px; gap: 8px; }
+            .question-row .qtext { font-size: 1.1rem; min-width: 80px; }
+            .question-row .qinput { width: 70px; font-size: 1rem; }
+            .qfeedback { min-width: 80px; font-size: 0.95rem; }
+            .level-grid { grid-template-columns: 1fr 1fr; }
+            .level-btn { font-size: 1.2rem; padding: 14px 4px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <h1>🧮 Integer Challenge</h1>
+    <div class="subhead">➕ ➖ ✖️ ➗  ·  worksheet style</div>
+
+    <!-- LEVEL SELECT -->
+    <div id="levelSelector">
+        <p style="font-weight:500; text-align:center; margin-bottom:8px; color:#2b4057;">Choose your level</p>
+        <div class="level-grid">
+            <button class="level-btn gold" data-level="gold">🥇 Gold</button>
+            <button class="level-btn green" data-level="green">🍏 Green</button>
+            <button class="level-btn purple" data-level="purple">🔮 Purple</button>
+            <button class="level-btn black" data-level="black">⬛ Black</button>
+        </div>
+        <p style="font-size:0.9rem; text-align:center; color:#5a6f84; margin-top:16px;">Gold (easiest) → Black (hardest)</p>
+    </div>
+
+    <!-- WORKSHEET AREA -->
+    <div id="worksheetArea" class="hidden">
+        <div id="questionsContainer" class="worksheet"></div>
+
+        <div class="action-bar">
+            <button class="primary-btn" id="checkBtn">✅ Check answers</button>
+            <button class="secondary-btn" id="retryBtn">🔄 Try again (same questions)</button>
+            <button class="secondary-btn" id="newLevelBtn">📋 Choose another level</button>
+        </div>
+
+        <div class="score-display" id="scoreDisplay">Score: <span id="scoreNum">0</span> / 10</div>
+
+        <div class="perfect-banner" id="perfectBanner">
+            <span class="trophy">🏆</span>
+            <h2>PERFECT SCORE!</h2>
+            <p>10/10 — you're a maths champion!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- helpers (same as before) -----
+        function rand(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateExactDivision() {
+            let q, d, n;
+            let attempts = 0;
+            do {
+                q = rand(-12, 12);
+                d = rand(-12, 12);
+                if (d === 0) d = (Math.random() > 0.5) ? 1 : -1;
+                n = q * d;
+                attempts++;
+            } while ((n < -12 || n > 12 || q === 0 || d === 0 || n === 0) && attempts < 200);
+            return { dividend: n, divisor: d, quotient: q };
+        }
+
+        function generateQuestion(level, idx) {
+            const isGold = level === 'gold';
+            const isGreen = level === 'green';
+            const isPurple = level === 'purple';
+            const isBlack = level === 'black';
+
+            const randInt = (min, max, excludeZero = false) => {
+                let v;
+                let tries = 0;
+                do {
+                    v = rand(min, max);
+                    tries++;
+                } while (excludeZero && v === 0 && tries < 100);
+                return v;
+            };
+
+            let a, b, c, op, op2, expr, answer, display;
+
+            if (isGold) {
+                const isMul = (idx < 2);
+                if (isMul) {
+                    a = randInt(-6, 6, false);
+                    b = randInt(-6, 6, false);
+                    expr = `${a} × ${b}`;
+                    answer = a * b;
+                } else {
+                    a = randInt(-12, 12, false);
+                    b = randInt(-12, 12, false);
+                    const useAdd = Math.random() < 0.5;
+                    if (useAdd) {
+                        expr = `${a} + ${b}`;
+                        answer = a + b;
+                    } else {
+                        expr = `${a} − ${b}`;
+                        answer = a - b;
+                    }
+                }
+                return { display: expr + ' = ?', answer, expr };
+
+            } else if (isGreen) {
+                if (idx < 4) {
+                    a = randInt(-12, 12, false);
+                    b = randInt(-12, 12, false);
+                    const useAdd = Math.random() < 0.5;
+                    if (useAdd) {
+                        expr = `${a} + ${b}`;
+                        answer = a + b;
+                    } else {
+                        expr = `${a} − ${b}`;
+                        answer = a - b;
+                    }
+                } else if (idx < 7) {
+                    a = randInt(-12, 12, false);
+                    b = randInt(-12, 12, false);
+                    expr = `${a} × ${b}`;
+                    answer = a * b;
+                } else {
+                    const { dividend, divisor, quotient } = generateExactDivision();
+                    expr = `${dividend} ÷ ${divisor}`;
+                    answer = quotient;
+                }
+                return { display: expr + ' = ?', answer, expr };
+
+            } else if (isPurple) {
+                const useBracket = (idx < 5);
+                const ops = ['+', '−', '×', '÷'];
+                let op1 = pick(ops);
+                let op2 = pick(ops);
+                let a = randInt(-12, 12, false);
+                let b = randInt(-12, 12, false);
+                let c = randInt(-12, 12, false);
+
+                function computeWithDiv(op, x, y) {
+                    if (op === '÷') {
+                        if (y === 0) return null;
+                        if (x % y !== 0) return null;
+                        return x / y;
+                    } else if (op === '×') return x * y;
+                    else if (op === '+') return x + y;
+                    else if (op === '−') return x - y;
+                    return null;
+                }
+
+                let ans = null;
+                let attempts = 0;
+                let exprStr = '';
+                while (ans === null && attempts < 100) {
+                    attempts++;
+                    a = randInt(-12, 12, false);
+                    b = randInt(-12, 12, false);
+                    c = randInt(-12, 12, false);
+                    op1 = pick(ops);
+                    op2 = pick(ops);
+
+                    if (useBracket) {
+                        const first = computeWithDiv(op1, a, b);
+                        if (first === null) continue;
+                        const second = computeWithDiv(op2, first, c);
+                        if (second === null) continue;
+                        if (!Number.isInteger(second)) continue;
+                        ans = second;
+                        exprStr = `(${a} ${op1} ${b}) ${op2} ${c}`;
+                    } else {
+                        const inner = computeWithDiv(op2, b, c);
+                        if (inner === null) continue;
+                        const outer = computeWithDiv(op1, a, inner);
+                        if (outer === null) continue;
+                        if (!Number.isInteger(outer)) continue;
+                        ans = outer;
+                        exprStr = `${a} ${op1} (${b} ${op2} ${c})`;
+                    }
+                    if (Math.abs(ans) > 500) { ans = null; continue; }
+                }
+                if (ans === null) {
+                    exprStr = `${rand(-6,6)} + ${rand(-6,6)}`;
+                    ans = eval(exprStr.replace('×','*').replace('−','-').replace('÷','/'));
+                }
+                return { display: exprStr + ' = ?', answer: ans, expr: exprStr };
+
+            } else if (isBlack) {
+                let base = randInt(-12, 12, false);
+                let exp = pick([2, 3, 0, -1]);
+                if (exp === -1) {
+                    base = pick([1, -1]);
+                }
+                if (exp === 0 && base === 0) base = pick([1, -1, 2, 3]);
+
+                let b = randInt(-12, 12, false);
+                let c = randInt(-12, 12, false);
+                let op = pick(['+', '−', '×', '÷']);
+                let secondOp = pick(['+', '−', '×', '÷']);
+
+                let ans = null;
+                let exprStr = '';
+                let attempts = 0;
+                while (ans === null && attempts < 150) {
+                    attempts++;
+                    b = randInt(-12, 12, false);
+                    c = randInt(-12, 12, false);
+                    op = pick(['+', '−', '×', '÷']);
+                    secondOp = pick(['+', '−', '×', '÷']);
+
+                    let pVal = (exp === 0) ? 1 : (exp === -1 ? 1/base : Math.pow(base, exp));
+                    let tokens = [pVal, op, b, secondOp, c];
+
+                    let simplified = [];
+                    for (let i = 0; i < tokens.length; i++) {
+                        if (tokens[i] === '×' || tokens[i] === '÷') {
+                            let left = simplified.pop();
+                            let right = tokens[i+1];
+                            let result;
+                            if (tokens[i] === '×') result = left * right;
+                            else {
+                                if (right === 0) { result = null; break; }
+                                if (left % right !== 0) { result = null; break; }
+                                result = left / right;
+                            }
+                            if (!Number.isInteger(result)) { result = null; break; }
+                            simplified.push(result);
+                            i++;
+                        } else {
+                            simplified.push(tokens[i]);
+                        }
+                    }
+                    if (simplified.includes(null)) continue;
+                    let finalAns = simplified[0];
+                    for (let i = 1; i < simplified.length; i += 2) {
+                        let opNow = simplified[i];
+                        let nextNum = simplified[i+1];
+                        if (opNow === '+') finalAns += nextNum;
+                        else if (opNow === '−') finalAns -= nextNum;
+                        else { finalAns = null; break; }
+                    }
+                    if (finalAns === null || !Number.isInteger(finalAns)) continue;
+                    if (Math.abs(finalAns) > 2000) continue;
+                    ans = finalAns;
+                    let powerStr = (exp === -1) ? `(${base})⁻¹` : (exp === 0 ? `(${base})⁰` : `${base}${exp === 2 ? '²' : exp === 3 ? '³' : '⁴'}`);
+                    exprStr = `${powerStr} ${op} ${b} ${secondOp} ${c}`;
+                }
+                if (ans === null) {
+                    exprStr = `2³ + 4`;
+                    ans = 12;
+                }
+                return { display: exprStr + ' = ?', answer: ans, expr: exprStr };
+            }
+            return { display: '1 + 1 = ?', answer: 2, expr: '1 + 1' };
+        }
+
+        // ----- state -----
+        let currentLevel = '';
+        let questions = [];          // array of { display, answer, expr }
+        let userAnswers = [];        // array of strings (user input)
+        let isChecked = false;       // whether we've shown results
+        let perfectShown = false;
+
+        // DOM refs
+        const levelSelector = document.getElementById('levelSelector');
+        const worksheetArea = document.getElementById('worksheetArea');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const checkBtn = document.getElementById('checkBtn');
+        const retryBtn = document.getElementById('retryBtn');
+        const newLevelBtn = document.getElementById('newLevelBtn');
+        const scoreNum = document.getElementById('scoreNum');
+        const perfectBanner = document.getElementById('perfectBanner');
+
+        // ----- render worksheet -----
+        function renderWorksheet() {
+            questionsContainer.innerHTML = '';
+            userAnswers = new Array(10).fill('');
+
+            questions.forEach((q, i) => {
+                const row = document.createElement('div');
+                row.className = 'question-row';
+                row.dataset.index = i;
+
+                const numSpan = document.createElement('span');
+                numSpan.className = 'qnum';
+                numSpan.textContent = `${i+1}.`;
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'qtext';
+                textSpan.textContent = q.display;
+
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'qinput';
+                input.dataset.index = i;
+                input.value = userAnswers[i] || '';
+                input.addEventListener('input', (e) => {
+                    userAnswers[i] = e.target.value;
+                });
+
+                const fb = document.createElement('span');
+                fb.className = 'qfeedback';
+                fb.dataset.index = i;
+                fb.textContent = '';
+
+                row.appendChild(numSpan);
+                row.appendChild(textSpan);
+                row.appendChild(input);
+                row.appendChild(fb);
+                questionsContainer.appendChild(row);
+            });
+
+            // reset state
+            isChecked = false;
+            perfectShown = false;
+            perfectBanner.classList.remove('show');
+            scoreNum.textContent = '0';
+            checkBtn.disabled = false;
+            checkBtn.textContent = '✅ Check answers';
+
+            // enable all inputs
+            document.querySelectorAll('.qinput').forEach(inp => {
+                inp.disabled = false;
+                inp.classList.remove('correct', 'wrong');
+            });
+        }
+
+        // ----- check answers -----
+        function checkAnswers() {
+            if (isChecked) return;
+            let correctCount = 0;
+            const inputs = document.querySelectorAll('.qinput');
+            const feedbacks = document.querySelectorAll('.qfeedback');
+
+            inputs.forEach((inp, i) => {
+                const userVal = inp.value.trim();
+                const correctAns = questions[i].answer;
+                let isCorrect = false;
+
+                if (userVal === '') {
+                    feedbacks[i].innerHTML = '❌ <span class="show-answer">(answer: ' + correctAns + ')</span>';
+                    feedbacks[i].className = 'qfeedback wrong';
+                    inp.classList.add('wrong');
+                } else {
+                    const num = Number(userVal);
+                    if (isNaN(num)) {
+                        feedbacks[i].innerHTML = '❌ <span class="show-answer">(answer: ' + correctAns + ')</span>';
+                        feedbacks[i].className = 'qfeedback wrong';
+                        inp.classList.add('wrong');
+                    } else if (num === correctAns) {
+                        isCorrect = true;
+                        correctCount++;
+                        feedbacks[i].textContent = '✅ Correct!';
+                        feedbacks[i].className = 'qfeedback correct';
+                        inp.classList.add('correct');
+                    } else {
+                        feedbacks[i].innerHTML = '❌ <span class="show-answer">(answer: ' + correctAns + ')</span>';
+                        feedbacks[i].className = 'qfeedback wrong';
+                        inp.classList.add('wrong');
+                    }
+                }
+                inp.disabled = true;
+            });
+
+            scoreNum.textContent = correctCount;
+            isChecked = true;
+            checkBtn.disabled = true;
+            checkBtn.textContent = '✅ Checked';
+
+            if (correctCount === 10) {
+                perfectBanner.classList.add('show');
+                perfectShown = true;
+            }
+        }
+
+        // ----- retry (same questions, clear answers) -----
+        function retrySameQuestions() {
+            // reset inputs and feedback
+            document.querySelectorAll('.qinput').forEach((inp, i) => {
+                inp.value = '';
+                inp.disabled = false;
+                inp.classList.remove('correct', 'wrong');
+                userAnswers[i] = '';
+            });
+            document.querySelectorAll('.qfeedback').forEach(fb => {
+                fb.textContent = '';
+                fb.className = 'qfeedback';
+            });
+            isChecked = false;
+            perfectShown = false;
+            perfectBanner.classList.remove('show');
+            scoreNum.textContent = '0';
+            checkBtn.disabled = false;
+            checkBtn.textContent = '✅ Check answers';
+        }
+
+        // ----- new level -----
+        function resetToLevelSelect() {
+            levelSelector.classList.remove('hidden');
+            worksheetArea.classList.add('hidden');
+            currentLevel = '';
+            questions = [];
+            userAnswers = [];
+            isChecked = false;
+            perfectShown = false;
+            perfectBanner.classList.remove('show');
+        }
+
+        // ----- initialise game with level -----
+        function initGame(level) {
+            currentLevel = level;
+            questions = [];
+            for (let i = 0; i < 10; i++) {
+                questions.push(generateQuestion(level, i));
+            }
+            userAnswers = new Array(10).fill('');
+            levelSelector.classList.add('hidden');
+            worksheetArea.classList.remove('hidden');
+            renderWorksheet();
+        }
+
+        // ----- event listeners -----
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const level = e.currentTarget.dataset.level;
+                initGame(level);
+            });
+        });
+
+        checkBtn.addEventListener('click', checkAnswers);
+
+        retryBtn.addEventListener('click', retrySameQuestions);
+
+        newLevelBtn.addEventListener('click', resetToLevelSelect);
+
+        // Allow Enter key to trigger check
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !worksheetArea.classList.contains('hidden')) {
+                const active = document.activeElement;
+                if (active && active.classList.contains('qinput')) {
+                    if (!isChecked) {
+                        checkAnswers();
+                    }
+                }
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>
